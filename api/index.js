@@ -6,7 +6,10 @@ const { User } = require("./models/user.model.js");
 require("dotenv").config();
 const { connectDB } = require("./db/index.js");
 const bcrypt = require("bcryptjs");
+const jwt=require("jsonwebtoken");
+const jwtSecret="asncnddkjsjkjkdjksjkdjks";
 const bcryptSalt = bcrypt.genSalt(10);
+
 
 connectDB();
 
@@ -36,7 +39,27 @@ app.post("/api/register", async (req, res) => {
   res.json({newUser})
 });
 
-app.post("/api/login",async(req,res)=>{
+app.post("/api/login",async (req,res)=>{
   const {email,password}=req.body;
-  res.json({email,password});
+  const flag=await User.findOne({email})
+  if (flag){
+     //check for passwords
+     const checkPassword=bcrypt.compareSync(password,flag.password);
+     if (checkPassword){
+      jwt.sign({email : flag.email,id : flag._id},jwtSecret,{},(err,createdToken)=>{
+          if (err){
+            throw err;
+          }
+          res.cookie('token',createdToken).json(flag);
+      })
+      //log in user
+     }
+     else {
+      res.json("password not ok");
+     }
+  }
+  else {
+    res.json("flag not found");
+  }
+  
 })

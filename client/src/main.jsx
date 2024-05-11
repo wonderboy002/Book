@@ -7,6 +7,7 @@ import Navigation from "./Components/Navigation.jsx";
 import Layout from "./Components/Layout.jsx";
 import Register from "./Pages/Register.jsx";
 import Login from "./Pages/Login.jsx";
+import { UserContextProvider } from "./UserContext.jsx";
 
 const router = createBrowserRouter([
   {
@@ -14,12 +15,16 @@ const router = createBrowserRouter([
     element: <Layout />,
     children: [
       {
+        path: "/",
+        element: <h1>This is the home page</h1>,
+      },
+      {
         path: "register",
-        element: <Register/>,
+        element: <Register />,
       },
       {
         path: "Login",
-        element: <Login/>
+        element: <Login />,
       },
     ],
   },
@@ -27,6 +32,8 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <UserContextProvider>
+      <RouterProvider router={router} />
+    </UserContextProvider>
   </React.StrictMode>
 );
