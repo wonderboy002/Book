@@ -8,6 +8,7 @@ import Layout from "./Components/Layout.jsx";
 import Register from "./Pages/Register.jsx";
 import Login from "./Pages/Login.jsx";
 import { UserContextProvider } from "./UserContext.jsx";
+import Profile from "./Pages/Profile.jsx";
 
 const router = createBrowserRouter([
   {
@@ -25,6 +26,10 @@ const router = createBrowserRouter([
       {
         path: "Login",
         element: <Login />,
+      },
+      {
+        path: "profile",
+        element: <Profile />,
       },
     ],
   },

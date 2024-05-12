@@ -1,7 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const app = express();
-app.use(express.json());
 const { User } = require("./models/user.model.js");
 require("dotenv").config();
 const { connectDB } = require("./db/index.js");
@@ -9,6 +8,9 @@ const bcrypt = require("bcryptjs");
 const jwt=require("jsonwebtoken");
 const jwtSecret="asncnddkjsjkjkdjksjkdjks";
 const bcryptSalt = bcrypt.genSalt(10);
+const cookieParser=require("cookie-parser");
+app.use(express.json());
+app.use(cookieParser());
 
 
 connectDB();
@@ -46,7 +48,7 @@ app.post("/api/login",async (req,res)=>{
      //check for passwords
      const checkPassword=bcrypt.compareSync(password,flag.password);
      if (checkPassword){
-      jwt.sign({email : flag.email,id : flag._id},jwtSecret,{},(err,createdToken)=>{
+      jwt.sign({email : flag.email,id : flag._id,fullName : flag.fullName},jwtSecret,{},(err,createdToken)=>{
           if (err){
             throw err;
           }
@@ -62,4 +64,25 @@ app.post("/api/login",async (req,res)=>{
     res.json("flag not found");
   }
   
+});
+
+app.get("/api/profile",(req,res)=>{
+  //grabbed token from frontend request
+  const {token}=req.cookies
+  if (!token){
+    res.json(null)
+  }
+  else {
+    //decrypt the token
+    jwt.verify(token,jwtSecret,{},(err,result)=>{
+        if (err){
+          throw err;
+        }
+        else {
+          res.json({result})
+        }
+    })
+  }
+
+ 
 })

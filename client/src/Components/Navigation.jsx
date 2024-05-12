@@ -1,7 +1,28 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useContext, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { UserContext } from "../UserContext";
+import axios from "axios";
+import { CiLogout } from "react-icons/ci";
+import { FaUserAlt } from "react-icons/fa";
 
 function Navigation() {
+  const { user, setUser } = useContext(UserContext);
+  const [logUser,setLogUser]=useState(null);
+  useEffect(() => {
+    if (!user) {
+      axios
+        .get("/api/profile")
+        .then((response) => setUser(response.data))
+        .catch((error) =>
+          console.log("Error while hitting /profile end point")
+        );
+    }
+  },[]);
+
+  useEffect(()=>{
+    setLogUser(user);
+  })
+
   return (
     <div>
       <header className="p-4 flex">
@@ -45,37 +66,50 @@ function Navigation() {
             </svg>
           </button>
         </div>
-        <Link to="register" className="userProfile border-2 border-gray-300 p-3 rounded-full shadow-md flex gap-2  items-center">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.5}
-            stroke="currentColor"
-            className="w-6 h-6"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"
-            />
-          </svg>
-          <button>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="w-6 h-6"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
-              />
-            </svg>
-          </button>
+        <Link
+          to={!user && "register"}
+          className="userProfile border-2 border-gray-300 p-3 rounded-full shadow-md flex gap-2  items-center"
+        >
+          {user && (
+            <div className="flex items-center gap-2 rounded-full">
+              <Link to="profile" className="Logout p-2"><FaUserAlt style={{fontSize : "20px"}}/></Link>
+             
+            </div>
+          )}
+          {!user && (
+            <>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="w-6 h-6"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"
+                />
+              </svg>
+              <button>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="w-6 h-6"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
+                  />
+                </svg>
+              </button>
+            </>
+          )}
         </Link>
       </header>
     </div>

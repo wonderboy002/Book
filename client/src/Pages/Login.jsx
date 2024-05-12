@@ -6,8 +6,8 @@ import { UserContext, UserContextProvider } from "../UserContext";
 function Login() {
   const [userDetails, setUserDetails] = useState({ email: "", password: "" });
   const [data, setData] = useState("");
-  const navigate=useNavigate();
-  const {user,setUser}=useContext(UserContext);
+  const navigate = useNavigate();
+  const { user, setUser } = useContext(UserContext);
   function loginUser(e) {
     e.preventDefault();
     axios
@@ -15,17 +15,25 @@ function Login() {
       .then((response) => {
         console.log(response);
         setData(response.data);
-        alert("Login Successfull!!");
-        setUser(response.data); 
-        navigate("/");
+        console.log(response.data);
+        if (
+          response.data === "password not ok" ||
+          response.data === "flag not found"
+        ) {
+          alert("Enter correct information!!!");
+        } else {
+          alert("Login Successfull!!");
+          setUser(response.data);
+          navigate("/");
+        }
       })
       .catch((err) => {
         console.log("Error While Logging in user");
       });
   }
-  useEffect(() => {
-    console.log("data grabbed from the backend in loginpage", data);
-  }, [data]);
+  // useEffect(() => {
+  //   console.log("data grabbed from the backend in loginpage", data);
+  // }, [data]);
   return (
     <div>
       <div className="form mt-28 flex flex-col items-center gap-4">

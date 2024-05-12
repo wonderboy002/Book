@@ -12,6 +12,10 @@ function Register(e) {
   function registerUser(e) {
     e.preventDefault();
     console.log(userDetails);
+    if (userDetails.fullName.length===0 || userDetails.email.length===0 || userDetails.password.length===0){
+      alert("Please enter all details")
+      return
+    }
     axios
       .post("/api/register", userDetails)
       .then((res) => {
