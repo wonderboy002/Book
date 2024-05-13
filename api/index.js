@@ -86,3 +86,7 @@ app.get("/api/profile",(req,res)=>{
 
  
 })
+
+app.get('/api/logout',(req,res)=>[
+  res.cookie('token','').json("successfull logout")
+])

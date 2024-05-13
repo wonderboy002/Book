@@ -1,3 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+.p-links.active {
+    background-color: crimson;
+    color: white;
+}

@@ -28,9 +28,10 @@ const router = createBrowserRouter([
         element: <Login />,
       },
       {
-        path: "profile",
+        path: "profile/:subpage?",//defining params for url
         element: <Profile />,
       },
+     
     ],
   },
 ]);
