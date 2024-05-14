@@ -31,6 +31,10 @@ const router = createBrowserRouter([
         path: "profile/:subpage?",//defining params for url
         element: <Profile />,
       },
+      {
+        path : "profile/:subpage/:action",
+        element : <Profile/>
+      }
      
     ],
   },
